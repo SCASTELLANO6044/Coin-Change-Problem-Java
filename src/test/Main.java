@@ -9,19 +9,18 @@ public class Main {
     public static void main(String[] args) {
         int [] cointType = {1, 3};
         int goal = 8;
-
-
+        memoization(cointType, 5);
     }
 
     private static List<int[]> memoization (int[] coinType, int goal){
         List<int[]> combinations = new ArrayList<>();
         int remaing = goal;
         Map<TreeBranch, Integer> memoizationMap = new HashMap<>();
-
+        execute(coinType, memoizationMap, new TreeBranch(coinType[0], goal), goal);
         return combinations;
     }
 
-    private int execute(int[] coinType, Map<TreeBranch, Integer> memoization,
+    private static int execute(int[] coinType, Map<TreeBranch, Integer> memoization,
                         TreeBranch branch, int goal){
 
         if (memoization.containsKey(branch)){
@@ -34,14 +33,12 @@ public class Main {
             return 0;
         }else {
             for (int coin : coinType){
-                TreeBranch treeBranch = new TreeBranch(coin, branch.getRemaining());
+                TreeBranch treeBranch = new TreeBranch(coin, branch.getRemaining()- branch.getCoinValue());
                 int branchResult = execute(coinType, memoization, treeBranch, goal);
-
+                memoization.put(treeBranch, branchResult);
             }
+            return memoization.get(branch);
         }
-
-
-        return 0;
     }
 
 
