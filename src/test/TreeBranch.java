@@ -1,8 +1,8 @@
 package test;
 
 public class TreeBranch {
-    private int coinValue;
-    private int remaining;
+    private final int coinValue;
+    private final int remaining;
 
     public TreeBranch(int coinValue, int remaining) {
         this.coinValue = coinValue;

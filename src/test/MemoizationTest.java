@@ -1,41 +1,44 @@
 package test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MemoizationTest {
-    public static int execute(int[] S, int n, int target, Map<String, Integer> lookup)
-    {
-        // if the total is 0, return 1 (solution found)
+    public static int execute(int[] coinTypeList, int coinTypeIndex, int target, Map<TreeBranch, Integer> memoizationDictionary) {
         if (target == 0) {
             return 1;
         }
 
-        // return 0 (solution does not exist) if total becomes negative,
-        // no elements are left
-        if (target < 0 || n < 0) {
+        if (target < 0 || coinTypeIndex < 0) {
             return 0;
         }
 
-        // construct a unique map key from dynamic elements of the input
-        String key = n + "|" + target;
+        TreeBranch key = new TreeBranch(coinTypeList[coinTypeIndex], target);
 
-        // if the subproblem is seen for the first time, solve it and
-        // store its result in a map
-        if (!lookup.containsKey(key))
-        {
-            // Case 1. Include current coin `S[n]` in solution and recur
-            // with remaining change `target-S[n]` with the same number of coins
-            int include = execute(S, n, target - S[n], lookup);
+        if (!memoizationDictionary.containsKey(key)) {
+            int include = execute(coinTypeList, coinTypeIndex, target - coinTypeList[coinTypeIndex], memoizationDictionary);
 
-            // Case 2. Exclude current coin `S[n]` from solution and recur
-            // for remaining coins `n-1`
-            int exclude = execute(S, n - 1, target, lookup);
+            int exclude = execute(coinTypeList, coinTypeIndex - 1, target, memoizationDictionary);
 
-            // assign total ways by including or excluding current coin
-            lookup.put(key, include + exclude);
+            memoizationDictionary.put(key, include+exclude);
         }
 
-        // return solution to the current subproblem
-        return lookup.get(key);
+        return memoizationDictionary.get(key);
+    }
+
+    public static String findChosenPath(Map<TreeBranch, Integer> memoizationDictionary, int[]coinTypeList, int target){
+//        TreeBranch index = new TreeBranch(coinTypeList[coinTypeList.length-1], target);
+//        int pathAmount = memoizationDictionary.get(index);
+//        List<List<Integer>> pathList = new ArrayList<>(pathAmount);
+//        List<Integer> path = new ArrayList<>();
+
+//        for (int i = 0; i < memoizationDictionary.get(index); i++){
+//            TreeBranch nextIncludeIndex = new TreeBranch(index.getCoinValue(), index.getRemaining()- index.getCoinValue());
+//            if (memoizationDictionary.containsKey(nextIncludeIndex)){
+//                path.add(nextIncludeIndex.getCoinValue());
+//            }
+//        }
+        return "null";
     }
 }
